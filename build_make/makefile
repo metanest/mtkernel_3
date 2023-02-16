@@ -10,6 +10,7 @@ TARGET := _IOTE_M367_
 #TARGET := _IOTE_RX231_
 #TARGET := _IOTE_STM32L4_
 #TARGET := _IOTE_RZA2M_
+TARGET := _SIFIVE_HIFIVE_REVB_
 
 RM := rm -rf
 
@@ -38,6 +39,9 @@ include iote_stm32l4.mk
 endif
 ifeq ($(TARGET), _IOTE_RZA2M_)
 include iote_rza2m.mk
+endif
+ifeq ($(TARGET), _SIFIVE_HIFIVE_REVB_)
+include sifive_hifive1_revb.mk
 endif
 
 -include mtkernel_3/app_sample/subdir.mk

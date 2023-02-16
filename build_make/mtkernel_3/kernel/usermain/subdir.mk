@@ -3,10 +3,12 @@
 ################################################################################
 
 OBJS += \
-./mtkernel_3/kernel/usermain/usermain.o 
+./mtkernel_3/kernel/usermain/usermain.o \
+./mtkernel_3/kernel/usermain/memcpy.o
 
 C_DEPS += \
-./mtkernel_3/kernel/usermain/usermain.d 
+./mtkernel_3/kernel/usermain/usermain.d \
+./mtkernel_3/kernel/usermain/memcpy.d
 
 mtkernel_3/kernel/usermain/%.o: ../kernel/usermain/%.c
 	@echo 'Building file: $<'
