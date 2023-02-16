@@ -49,6 +49,13 @@
 
 #endif
 
+#ifdef _SIFIVE_HIFIVE_REVB_
+#include "sysdepend/sifive_hifive1_revb/machine.h"
+
+#define Csym(sym) sym
+
+#endif
+
 /* ===== C compiler dependencies definitions ============================= */
 
 #ifdef __GNUC__

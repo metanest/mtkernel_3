@@ -74,6 +74,9 @@ typedef volatile UH		_UH;
 typedef volatile UW		_UW;
 typedef volatile UD		_UD;
 
+typedef signed long		LONG;		/* if __LP64__, this is 64 bits */
+typedef unsigned long		ULONG;		/*  ... unsigned */
+
 typedef W			SZ;		/* Size general */
 
 typedef INT			ID;		/* ID general */
