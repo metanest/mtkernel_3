@@ -28,7 +28,6 @@ IMPORT const void (*vector_tbl[])();
 EXPORT void reset_main(void)
 {
 	UW	*src, *top, *end;
-	UW	reg;
 	INT	i;
 
 	/* Startup Hardware */

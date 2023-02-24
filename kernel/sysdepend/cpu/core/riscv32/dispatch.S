@@ -70,38 +70,19 @@ Csym(knl_dispatch_to_schedtsk):
 	.type	Csym(knl_dispatch_entry), %function
 Csym(knl_dispatch_entry):
 	// Context save
-	addi    sp, sp, -4*29
-	sw	a0, 0*4(sp)
-	sw	a1, 1*4(sp)
-	sw	a2, 2*4(sp)
-	sw	a3, 3*4(sp)
-	sw	a4, 4*4(sp)
-	sw	a5, 5*4(sp)
-	sw	a6, 6*4(sp)
-	sw	a7, 7*4(sp)
-	sw	s0, 8*4(sp)
-	sw	s1, 9*4(sp)
-	sw	s2, 10*4(sp)
-	sw	s3, 11*4(sp)
-	sw	s4, 12*4(sp)
-	sw	s5, 13*4(sp)
-	sw	s6, 14*4(sp)
-	sw	s7, 15*4(sp)
-	sw	s8, 16*4(sp)
-	sw	s9, 17*4(sp)
-	sw	s10, 18*4(sp)
-	sw	s11, 19*4(sp)
-	sw	t0, 20*4(sp)
-	sw	t1, 21*4(sp)
-	sw	t2, 22*4(sp)
-	sw	t3, 23*4(sp)
-	sw	t4, 24*4(sp)
-	sw	t5, 25*4(sp)
-	sw	t6, 26*4(sp)
-	sw	ra, 27*4(sp)
-
-	csrr	a0, mstatus
-	sw	a0, 28*4(sp)
+	addi    sp, sp, -4*12
+	sw	s0, 0*4(sp)
+	sw	s1, 1*4(sp)
+	sw	s2, 2*4(sp)
+	sw	s3, 3*4(sp)
+	sw	s4, 4*4(sp)
+	sw	s5, 5*4(sp)
+	sw	s6, 6*4(sp)
+	sw	s7, 7*4(sp)
+	sw	s8, 8*4(sp)
+	sw	s9, 9*4(sp)
+	sw	s10, 10*4(sp)
+	sw	s11, 11*4(sp)
 
 	li	a1, 1
 	lui	a0, %hi(Csym(knl_dispatch_disabled))
@@ -129,7 +110,9 @@ l_dispatch1:
 	/* Because there is no task that should be executed, move to the power-saving mode */
 	lw	a0, (s6)				// Is 'low_pow' disabled?
 	bnez	a0, 1f
+	mv	s0, ra
 	call	Csym(low_pow)				// call low_pow()
+	mv	ra, s0
 1:
 	li      a0, STATUS_MIE
 	csrs	mstatus, a0				// enable interrupt
@@ -146,39 +129,20 @@ TODO(FPU)
 	lui	a0, %hi(Csym(knl_dispatch_disabled))
 	sw	zero, %lo(Csym(knl_dispatch_disabled))(a0)	// Dispatch enable
 
-	lw	a0, 28*4(sp)
-	csrw	mstatus, a0		// restore mstatus
+	lw	s0, 0*4(sp)	// restore registers
+	lw	s1, 1*4(sp)
+	lw	s2, 2*4(sp)
+	lw	s3, 3*4(sp)
+	lw	s4, 4*4(sp)
+	lw	s5, 5*4(sp)
+	lw	s6, 6*4(sp)
+	lw	s7, 7*4(sp)
+	lw	s8, 8*4(sp)
+	lw	s9, 9*4(sp)
+	lw	s10, 10*4(sp)
+	lw	s11, 11*4(sp)
+	addi    sp, sp, 4*12
 
-	lw	a0, 0*4(sp)		// restore registers
-	lw	a1, 1*4(sp)
-	lw	a2, 2*4(sp)
-	lw	a3, 3*4(sp)
-	lw	a4, 4*4(sp)
-	lw	a5, 5*4(sp)
-	lw	a6, 6*4(sp)
-	lw	a7, 7*4(sp)
-	lw	s0, 8*4(sp)
-	lw	s1, 9*4(sp)
-	lw	s2, 10*4(sp)
-	lw	s3, 11*4(sp)
-	lw	s4, 12*4(sp)
-	lw	s5, 13*4(sp)
-	lw	s6, 14*4(sp)
-	lw	s7, 15*4(sp)
-	lw	s8, 16*4(sp)
-	lw	s9, 17*4(sp)
-	lw	s10, 18*4(sp)
-	lw	s11, 19*4(sp)
-	lw	t0, 20*4(sp)
-	lw	t1, 21*4(sp)
-	lw	t2, 22*4(sp)
-	lw	t3, 23*4(sp)
-	lw	t4, 24*4(sp)
-	lw	t5, 25*4(sp)
-	lw	t6, 26*4(sp)
-	lw	ra, 27*4(sp)
-	addi    sp, sp, 4*29
-
-	ret				// restore pc
+	ret
 
 #endif /* CPU_CORE_RISCV32 */

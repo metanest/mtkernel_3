@@ -37,6 +37,7 @@ typedef struct t_regs {
  * Exception-related register		tk_get_reg tk_set_reg
  */
 typedef struct t_eit {
+	void	*epc;		/* status */
 	UW	status;		/* status */
 } T_EIT;
 

@@ -51,7 +51,7 @@ EXPORT void knl_set_reg( TCB *tcb, CONST T_REGS *regs, CONST T_EIT *eit, CONST T
 	}
 
 	if ( eit != NULL ) {
-		//ssp->pc = eit->pc;
+		ssp->epc = eit->epc;
 		ssp->status = eit->status;
 	}
 }
@@ -81,7 +81,7 @@ EXPORT void knl_get_reg( TCB *tcb, T_REGS *regs, T_EIT *eit, T_CREGS *cregs )
 	}
 
 	if ( eit != NULL ) {
-		//eit->pc = ssp->pc;
+		eit->epc = ssp->epc;
 		eit->status = ssp->status;
 	}
 
@@ -177,20 +177,12 @@ EXPORT ER knl_get_cpr( TCB *tcb, INT copno, T_COPREGS *copregs)
  */
 EXPORT void knl_force_dispatch( void )
 {
-	const FP fp = knl_dispatch_to_schedtsk;
-
-	disint();
-
-	Asm("jr (%0)" :: "r"(fp));       /* No return */
+	Asm("li	a0, 2\necall");		/* No return */
 }
 
 EXPORT void knl_dispatch( void )
 {
-	const ULONG status = disint();
-
-	knl_dispatch_entry();
-
-	enaint(status);
+	Asm("li	a0, 1\necall");
 }
 
 #endif /* CPU_CORE_RISCV32 */
