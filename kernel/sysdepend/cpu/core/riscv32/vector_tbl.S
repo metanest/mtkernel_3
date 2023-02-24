@@ -14,9 +14,10 @@
  */
 	.global Csym(vector_table)
 
+	.extern Csym(knl_dispatch_entry)
+	.extern Csym(knl_dispatch_to_schedtsk)
 	.extern Csym(Exception_Handler)
 	.extern Csym(Default_Handler)
-	.extern Csym(knl_systim_inthdr)
 	.extern Csym(knl_intvec_tbl)
 
 	.balign 128
@@ -55,146 +56,204 @@ Csym(vector_table):
 
 	.balign 4
 exception_handler:
-	addi	sp, sp, -4*16
-	sw	ra, 0*4(sp)
-	sw	a0, 1*4(sp)
-	sw	a1, 2*4(sp)
-	sw	a2, 3*4(sp)
-	sw	a3, 4*4(sp)
-	sw	a4, 5*4(sp)
-	sw	a5, 6*4(sp)
-	sw	a6, 7*4(sp)
-	sw	a7, 8*4(sp)
-	sw	t0, 9*4(sp)
-	sw	t1, 10*4(sp)
-	sw	t2, 11*4(sp)
-	sw	t3, 12*4(sp)
-	sw	t4, 13*4(sp)
-	sw	t5, 14*4(sp)
-	sw	t6, 15*4(sp)
+	addi	sp, sp, -4*20
+	sw	a0, 0*4(sp)
+	sw	a1, 1*4(sp)
+	sw	a2, 2*4(sp)
+	sw	a3, 3*4(sp)
+	sw	a4, 4*4(sp)
+	sw	a5, 5*4(sp)
+	sw	a6, 6*4(sp)
+	sw	a7, 7*4(sp)
+	sw	t0, 8*4(sp)
+	sw	t1, 9*4(sp)
+	sw	t2, 10*4(sp)
+	sw	t3, 11*4(sp)
+	sw	t4, 12*4(sp)
+	sw	t5, 13*4(sp)
+	sw	t6, 14*4(sp)
+	sw	ra, 15*4(sp)
+
+	csrr	t0, mepc
+	sw	t0, 16*4(sp)
+	csrr	t0, mstatus
+	sw	t0, 17*4(sp)
+
+	csrr	t0, mcause		// exceptionの原因が
+	li	t1, 11			// ecallか?
+	bne	t0, t1, 2f		// ecall以外ならジャンプ
+
+	lw	t0, 16*4(sp)
+	addi	t0, t0, 4		// 戻りアドレス(mepc)をecallの次へ
+	sw	t0, 16*4(sp)
+
+	addi	a0, a0, -1
+	bnez	a0, 1f
+	call	Csym(knl_dispatch_entry)
+	j	3f
+1:	addi	a0, a0, -1
+	bnez	a0, 2f
+	call	Csym(knl_dispatch_to_schedtsk)
+	j	3f
+2:
 	call	Csym(Exception_Handler)
-	lw	ra, 0*4(sp)
-	lw	a0, 1*4(sp)
-	lw	a1, 2*4(sp)
-	lw	a2, 3*4(sp)
-	lw	a3, 4*4(sp)
-	lw	a4, 5*4(sp)
-	lw	a5, 6*4(sp)
-	lw	a6, 7*4(sp)
-	lw	a7, 8*4(sp)
-	lw	t0, 9*4(sp)
-	lw	t1, 10*4(sp)
-	lw	t2, 11*4(sp)
-	lw	t3, 12*4(sp)
-	lw	t4, 13*4(sp)
-	lw	t5, 14*4(sp)
-	lw	t6, 15*4(sp)
-	addi	sp, sp, 4*16
+3:
+	lw	t0, 16*4(sp)
+	csrw	mepc, t0
+	lw	t0, 17*4(sp)
+	csrw	mstatus, t0
+
+	lw	a0, 0*4(sp)
+	lw	a1, 1*4(sp)
+	lw	a2, 2*4(sp)
+	lw	a3, 3*4(sp)
+	lw	a4, 4*4(sp)
+	lw	a5, 5*4(sp)
+	lw	a6, 6*4(sp)
+	lw	a7, 7*4(sp)
+	lw	t0, 8*4(sp)
+	lw	t1, 9*4(sp)
+	lw	t2, 10*4(sp)
+	lw	t3, 11*4(sp)
+	lw	t4, 12*4(sp)
+	lw	t5, 13*4(sp)
+	lw	t6, 14*4(sp)
+	lw	ra, 15*4(sp)
+	addi	sp, sp, 4*20
 	mret
 
 	.balign 4
 undefined_handler:
-	addi	sp, sp, -4*16
-	sw	ra, 0*4(sp)
-	sw	a0, 1*4(sp)
-	sw	a1, 2*4(sp)
-	sw	a2, 3*4(sp)
-	sw	a3, 4*4(sp)
-	sw	a4, 5*4(sp)
-	sw	a5, 6*4(sp)
-	sw	a6, 7*4(sp)
-	sw	a7, 8*4(sp)
-	sw	t0, 9*4(sp)
-	sw	t1, 10*4(sp)
-	sw	t2, 11*4(sp)
-	sw	t3, 12*4(sp)
-	sw	t4, 13*4(sp)
-	sw	t5, 14*4(sp)
-	sw	t6, 15*4(sp)
+	addi	sp, sp, -4*20
+	sw	a0, 0*4(sp)
+	sw	a1, 1*4(sp)
+	sw	a2, 2*4(sp)
+	sw	a3, 3*4(sp)
+	sw	a4, 4*4(sp)
+	sw	a5, 5*4(sp)
+	sw	a6, 6*4(sp)
+	sw	a7, 7*4(sp)
+	sw	t0, 8*4(sp)
+	sw	t1, 9*4(sp)
+	sw	t2, 10*4(sp)
+	sw	t3, 11*4(sp)
+	sw	t4, 12*4(sp)
+	sw	t5, 13*4(sp)
+	sw	t6, 14*4(sp)
+	sw	ra, 15*4(sp)
+
+	csrr	t0, mepc
+	sw	t0, 16*4(sp)
+	csrr	t0, mstatus
+	sw	t0, 17*4(sp)
+
 	call	Csym(Default_Handler)
-	lw	ra, 0*4(sp)
-	lw	a0, 1*4(sp)
-	lw	a1, 2*4(sp)
-	lw	a2, 3*4(sp)
-	lw	a3, 4*4(sp)
-	lw	a4, 5*4(sp)
-	lw	a5, 6*4(sp)
-	lw	a6, 7*4(sp)
-	lw	a7, 8*4(sp)
-	lw	t0, 9*4(sp)
-	lw	t1, 10*4(sp)
-	lw	t2, 11*4(sp)
-	lw	t3, 12*4(sp)
-	lw	t4, 13*4(sp)
-	lw	t5, 14*4(sp)
-	lw	t6, 15*4(sp)
-	addi	sp, sp, 4*16
+
+	lw	t0, 16*4(sp)
+	csrw	mepc, t0
+	lw	t0, 17*4(sp)
+	csrw	mstatus, t0
+
+	lw	a0, 0*4(sp)
+	lw	a1, 1*4(sp)
+	lw	a2, 2*4(sp)
+	lw	a3, 3*4(sp)
+	lw	a4, 4*4(sp)
+	lw	a5, 5*4(sp)
+	lw	a6, 6*4(sp)
+	lw	a7, 7*4(sp)
+	lw	t0, 8*4(sp)
+	lw	t1, 9*4(sp)
+	lw	t2, 10*4(sp)
+	lw	t3, 11*4(sp)
+	lw	t4, 12*4(sp)
+	lw	t5, 13*4(sp)
+	lw	t6, 14*4(sp)
+	lw	ra, 15*4(sp)
+	addi	sp, sp, 4*20
 	mret
 
 	.balign 4
 timer_handler:
-	addi	sp, sp, -4*16
-	sw	ra, 0*4(sp)
-	sw	a0, 1*4(sp)
-	sw	a1, 2*4(sp)
-	sw	a2, 3*4(sp)
-	sw	a3, 4*4(sp)
-	sw	a4, 5*4(sp)
-	sw	a5, 6*4(sp)
-	sw	a6, 7*4(sp)
-	sw	a7, 8*4(sp)
-	sw	t0, 9*4(sp)
-	sw	t1, 10*4(sp)
-	sw	t2, 11*4(sp)
-	sw	t3, 12*4(sp)
-	sw	t4, 13*4(sp)
-	sw	t5, 14*4(sp)
-	sw	t6, 15*4(sp)
+	addi	sp, sp, -4*20
+	sw	a0, 0*4(sp)
+	sw	a1, 1*4(sp)
+	sw	a2, 2*4(sp)
+	sw	a3, 3*4(sp)
+	sw	a4, 4*4(sp)
+	sw	a5, 5*4(sp)
+	sw	a6, 6*4(sp)
+	sw	a7, 7*4(sp)
+	sw	t0, 8*4(sp)
+	sw	t1, 9*4(sp)
+	sw	t2, 10*4(sp)
+	sw	t3, 11*4(sp)
+	sw	t4, 12*4(sp)
+	sw	t5, 13*4(sp)
+	sw	t6, 14*4(sp)
+	sw	ra, 15*4(sp)
+
+	csrr	t0, mepc
+	sw	t0, 16*4(sp)
+	csrr	t0, mstatus
+	sw	t0, 17*4(sp)
+
 	mv	a0, zero
 	call	Csym(knl_hll_inthdr)
-	lw	ra, 0*4(sp)
-	lw	a0, 1*4(sp)
-	lw	a1, 2*4(sp)
-	lw	a2, 3*4(sp)
-	lw	a3, 4*4(sp)
-	lw	a4, 5*4(sp)
-	lw	a5, 6*4(sp)
-	lw	a6, 7*4(sp)
-	lw	a7, 8*4(sp)
-	lw	t0, 9*4(sp)
-	lw	t1, 10*4(sp)
-	lw	t2, 11*4(sp)
-	lw	t3, 12*4(sp)
-	lw	t4, 13*4(sp)
-	lw	t5, 14*4(sp)
-	lw	t6, 15*4(sp)
-	addi	sp, sp, 4*16
+
+	lw	t0, 16*4(sp)
+	csrw	mepc, t0
+	lw	t0, 17*4(sp)
+	csrw	mstatus, t0
+
+	lw	a0, 0*4(sp)
+	lw	a1, 1*4(sp)
+	lw	a2, 2*4(sp)
+	lw	a3, 3*4(sp)
+	lw	a4, 4*4(sp)
+	lw	a5, 5*4(sp)
+	lw	a6, 6*4(sp)
+	lw	a7, 7*4(sp)
+	lw	t0, 8*4(sp)
+	lw	t1, 9*4(sp)
+	lw	t2, 10*4(sp)
+	lw	t3, 11*4(sp)
+	lw	t4, 12*4(sp)
+	lw	t5, 13*4(sp)
+	lw	t6, 14*4(sp)
+	lw	ra, 15*4(sp)
+	addi	sp, sp, 4*20
 	mret
 
 	.balign 4
 external_handler:
-	addi	sp, sp, -4*17
-	sw	ra, 0*4(sp)
-	sw	a0, 1*4(sp)
-	sw	a1, 2*4(sp)
-	sw	a2, 3*4(sp)
-	sw	a3, 4*4(sp)
-	sw	a4, 5*4(sp)
-	sw	a5, 6*4(sp)
-	sw	a6, 7*4(sp)
-	sw	a7, 8*4(sp)
-	sw	t0, 9*4(sp)
-	sw	t1, 10*4(sp)
-	sw	t2, 11*4(sp)
-	sw	t3, 12*4(sp)
-	sw	t4, 13*4(sp)
-	sw	t5, 14*4(sp)
-	sw	t6, 15*4(sp)
+	addi	sp, sp, -4*20
+	sw	a0, 0*4(sp)
+	sw	a1, 1*4(sp)
+	sw	a2, 2*4(sp)
+	sw	a3, 3*4(sp)
+	sw	a4, 4*4(sp)
+	sw	a5, 5*4(sp)
+	sw	a6, 6*4(sp)
+	sw	a7, 7*4(sp)
+	sw	t0, 8*4(sp)
+	sw	t1, 9*4(sp)
+	sw	t2, 10*4(sp)
+	sw	t3, 11*4(sp)
+	sw	t4, 12*4(sp)
+	sw	t5, 13*4(sp)
+	sw	t6, 14*4(sp)
+	sw	ra, 15*4(sp)
+
+	csrr	t0, mepc
+	sw	t0, 16*4(sp)
+	csrr	t0, mstatus
+	sw	t0, 17*4(sp)
 
 	lui	a0, %hi(PLIC_CLAIM_COMPLETE)
 	lw	a0, %lo(PLIC_CLAIM_COMPLETE)(a0)
 	beqz	a0, 3f
-	sw	a0, 16*4(sp)
+	sw	a0, 18*4(sp)
 
 	lui	a1, %hi(Csym(knl_intvec_tbl))
 	addi	a1, a1, %lo(Csym(knl_intvec_tbl))
@@ -208,27 +267,32 @@ external_handler:
 1:
 	call	Csym(Default_Handler)
 2:
-	lw	a1, 16*4(sp)
+	lw	a1, 18*4(sp)
 	lui	a0, %hi(PLIC_CLAIM_COMPLETE)
 	sw	a1, %lo(PLIC_CLAIM_COMPLETE)(a0)
 3:
-	lw	ra, 0*4(sp)
-	lw	a0, 1*4(sp)
-	lw	a1, 2*4(sp)
-	lw	a2, 3*4(sp)
-	lw	a3, 4*4(sp)
-	lw	a4, 5*4(sp)
-	lw	a5, 6*4(sp)
-	lw	a6, 7*4(sp)
-	lw	a7, 8*4(sp)
-	lw	t0, 9*4(sp)
-	lw	t1, 10*4(sp)
-	lw	t2, 11*4(sp)
-	lw	t3, 12*4(sp)
-	lw	t4, 13*4(sp)
-	lw	t5, 14*4(sp)
-	lw	t6, 15*4(sp)
-	addi	sp, sp, 4*17
+	lw	t0, 16*4(sp)
+	csrw	mepc, t0
+	lw	t0, 17*4(sp)
+	csrw	mstatus, t0
+
+	lw	a0, 0*4(sp)
+	lw	a1, 1*4(sp)
+	lw	a2, 2*4(sp)
+	lw	a3, 3*4(sp)
+	lw	a4, 4*4(sp)
+	lw	a5, 5*4(sp)
+	lw	a6, 6*4(sp)
+	lw	a7, 7*4(sp)
+	lw	t0, 8*4(sp)
+	lw	t1, 9*4(sp)
+	lw	t2, 10*4(sp)
+	lw	t3, 11*4(sp)
+	lw	t4, 12*4(sp)
+	lw	t5, 13*4(sp)
+	lw	t6, 14*4(sp)
+	lw	ra, 15*4(sp)
+	addi	sp, sp, 4*20
 	mret
 
 #endif	/* CPU_CORE_RISCV32 */

@@ -10,11 +10,14 @@
  * System stack configuration at task startup
  */
 typedef struct {
-	UW	a[8];   // a0-a7
-	UW	s[12];  // s0-s11
-	UW	t[7];   // t0-t6
+	VW	s[12];  // s0-s11
+	VW	a[8];   // a0-a7
+	VW	t[7];   // t0-t6
 	void	*ra;
-	UW	status;
+	void	*epc;
+	VW	status;
+	VW	workspace0;
+	VW	workspace1;
 } SStackFrame;
 
 /*
@@ -44,9 +47,10 @@ Inline void knl_setup_context( TCB *tcb )
 	ssp--;
 
 	/* CPU context initialization */
-	ssp->status = 0x00000008;	/* Initial status */
-	ssp->ra = tcb->task;		/* Task startup address */
-
+	ssp->ra = NULL;
+	ssp->epc = tcb->task;		/* Task startup address */
+	ssp->status = 0x00001880;	/* Initial status */
+					/* MPP=11, MPIE=1 */
 	tcb->tskctxb.ssp = ssp;		/* System stack */
 }
 

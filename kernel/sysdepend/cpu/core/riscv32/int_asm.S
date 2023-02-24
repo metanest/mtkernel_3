@@ -56,7 +56,7 @@ not_1st_hllint:
 	addi	sp, sp, -4
 	sw	ra, 0(sp)
 
-	lui	a1, %hi(Csym(knl_hll_inthdr_tbl))	// call knl_hll_inthdr_tbl[n](intno)
+	lui	a1, %hi(Csym(knl_hll_inthdr_tbl))	// call knl_hll_inthdr_tbl[intno]()
 	addi	a1, a1, %lo(Csym(knl_hll_inthdr_tbl))
 	slli	a0, a0, 2
 	add	a0, a0, a1
@@ -94,7 +94,7 @@ TODO(FPU)
 	lui	a1, %hi(Csym(knl_schedtsk))
 	lw	a1, %lo(Csym(knl_schedtsk))(a1)
 	beq	a0, a1, return_inthdr_end
-	call	knl_dispatch_entry		// call dispatch processing
+	j	knl_dispatch_entry		// goto dispatch processing
 return_inthdr_end:
 	ret
 
