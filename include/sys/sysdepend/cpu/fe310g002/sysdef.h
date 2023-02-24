@@ -31,48 +31,12 @@
 
 /* ------------------------------------------------------------------------ */
 /*
- * TODO
- */
-
-/* TODO Registers */
-
-/* ------------------------------------------------------------------------ */
-/*
  * System Timer Clock
  */
 
 /* Settable interval range (millisecond) */
 #define MIN_TIMER_PERIOD	1
 #define MAX_TIMER_PERIOD	50
-
-#if 0
-/* ------------------------------------------------------------------------ */^M
-/*^M
- * GIC(Generic Interrupt Controller) -400^M
- */^M
-#define GICD_BASE       0xE8221000UL            /* Distributor register base address */^M
-#define GICC_BASE       0xE8222000UL            /* CPU interface register base address */^M
-^M
-^M
-/* ------------------------------------------------------------------------ */^M
-/*^M
- * Number of Interrupt vectors^M
- */^M
-#define N_INTVEC                (512)           /* Number of Interrupt vectors */^M
-^M
-/*^M
- * The number of the implemented bit width for priority value fields.^M
- */^M
-#define INTPRI_BITWIDTH         5       /* bitwidth of interrupt priority */^M
-^M
-/*^M
- * Interrupt Priority Levels^M
- */^M
-#define INTPRI_SHIFT            (8 - INTPRI_BITWIDTH)^M
-#define INTPRI_HIGHEST          0       /* Highest interrupt level */^M
-#define INTPRI_LOWEST           31      /* Lowest  interrupt level  */^M
-#define INTPRI_SYSTICK          1       /* interrupt priority for SysTick */^M
-#endif
 
 /* ------------------------------------------------------------------------ */
 /*

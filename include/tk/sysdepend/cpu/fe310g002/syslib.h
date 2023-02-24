@@ -11,18 +11,6 @@
 
 /* ------------------------------------------------------------------------ */
 /*
- * Interrupt Control
- */
-
-/*
- * Interrupt mode ( Use SetIntMode )
- */
-//TODO
-#define	IM_LEVEL	0x00	/* high level detection */
-#define	IM_EDGE		0x01	/* Rising edge detection */
-
-/* ------------------------------------------------------------------------ */
-/*
  * I/O port access
  *	for memory mapped I/O
  */
