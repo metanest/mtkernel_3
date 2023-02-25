@@ -145,9 +145,7 @@ EXPORT void SetIntMode(  UINT intno, UINT mode )
  */
 EXPORT void ClearInt( UINT intno )
 {
-	if (intno >= N_INTVEC) return;		/* Error */
-
-	out_w(PLIC_CLAIM_COMPLETE, intno);
+	/* XXX didn't support ClearInt XXX */
 }
 
 /*
