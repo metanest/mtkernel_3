@@ -143,10 +143,12 @@ EXPORT void SetIntMode(  UINT intno, UINT mode )
  *	Un-pends the associated interrupt under software control.
  *	External Interrupt can be specified.
  */
+#if 0
 EXPORT void ClearInt( UINT intno )
 {
-	/* XXX didn't support ClearInt XXX */
+	/* didn't support ClearInt */
 }
+#endif
 
 /*
  * Check active state
