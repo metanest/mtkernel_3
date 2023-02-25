@@ -177,12 +177,12 @@ EXPORT ER knl_get_cpr( TCB *tcb, INT copno, T_COPREGS *copregs)
  */
 EXPORT void knl_force_dispatch( void )
 {
-	Asm("li	a0, 2\necall");		/* No return */
+	Asm("li	a0, 2\nli a1, -449\necall");		/* No return */
 }
 
 EXPORT void knl_dispatch( void )
 {
-	Asm("li	a0, 1\necall");
+	Asm("li	a0, 1\nli a1, -448\necall");
 }
 
 #endif /* CPU_CORE_RISCV32 */

@@ -50,9 +50,9 @@
 	.globl	Csym(knl_dispatch_to_schedtsk)
 	.type	Csym(knl_dispatch_to_schedtsk), %function
 Csym(knl_dispatch_to_schedtsk):
-	li	a1, 1
+	li	a2, 1
 	lui	a0, %hi(Csym(knl_dispatch_disabled))
-	sw	a1, %lo(Csym(knl_dispatch_disabled))(a0)	// Dispatch disable
+	sw	a2, %lo(Csym(knl_dispatch_disabled))(a0)	// Dispatch disable
 
 	lui	s4, %hi(Csym(knl_ctxtsk))
 	addi	s4, s4, %lo(Csym(knl_ctxtsk))		// S4: &ctxtsk
@@ -61,6 +61,13 @@ Csym(knl_dispatch_to_schedtsk):
 	sw	zero, (s4)				// ctxtsk = NULL
 
 	j	l_dispatch0
+
+//	.type   msg,@object
+//	.section	.sdata,"aw",@progbits
+//msg:
+//	.asciz  " %d "
+//	.size   msg, 5
+
 /* ----------------------------------------
  *     normal dispatch
  * ---------------------------------------- */
@@ -84,9 +91,9 @@ Csym(knl_dispatch_entry):
 	sw	s10, 10*4(sp)
 	sw	s11, 11*4(sp)
 
-	li	a1, 1
+	li	a2, 1
 	lui	a0, %hi(Csym(knl_dispatch_disabled))
-	sw	a1, %lo(Csym(knl_dispatch_disabled))(a0)	// Dispatch disable
+	sw	a2, %lo(Csym(knl_dispatch_disabled))(a0)	// Dispatch disable
 
 	lui	s4, %hi(Csym(knl_ctxtsk))
 	addi	s4, s4, %lo(Csym(knl_ctxtsk))		// S4: &ctxtsk
@@ -96,6 +103,12 @@ Csym(knl_dispatch_entry):
 	sw	zero, (s4)				// ctxtsk = NULL
 1:
 l_dispatch0:
+
+//	mv	s0, ra
+//	la	a0, msg
+//	call	tm_printf
+//	mv	ra, s0
+
 	lui	s5, %hi(Csym(knl_schedtsk))
 	addi	s5, s5, %lo(Csym(knl_schedtsk))		// S5: &schedtsk
 	lui	s6, %hi(Csym(knl_lowpow_discnt))

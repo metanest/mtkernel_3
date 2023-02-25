@@ -94,6 +94,7 @@ TODO(FPU)
 	lui	a1, %hi(Csym(knl_schedtsk))
 	lw	a1, %lo(Csym(knl_schedtsk))(a1)
 	beq	a0, a1, return_inthdr_end
+	li	a1, -447
 	j	knl_dispatch_entry		// goto dispatch processing
 return_inthdr_end:
 	ret
