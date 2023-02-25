@@ -10,7 +10,7 @@
 /*
  * System call/extension SVC caller information
  */
-#if 0 /* TODO */
+#if 0
 typedef struct td_calinf {
 	void	*sp;		/* stack pointer when calling */
 	void	*pc;		/* program counter when calling */
