@@ -43,8 +43,8 @@ Csym(knl_hll_inthdr):
 	bnez	a2, not_1st_hllint		//      no => jump
 
 	mv	a1, sp
-	lui	a2, %hi(0x80004000)		// INITIAL_SP
-	addi	a2, a2, %lo(0x80004000)		// XXX
+	lui	a2, %hi(INITIAL_SP)
+	addi	a2, a2, %lo(INITIAL_SP)
 	mv	sp, a2
 #if USE_FPU & INTHDR_DIS_FPU
 TODO(FPU)

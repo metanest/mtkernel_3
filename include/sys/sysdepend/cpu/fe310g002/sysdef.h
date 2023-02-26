@@ -21,13 +21,11 @@
 #define INTERNAL_RAM_START	0x80000000
 #define INTERNAL_RAM_END	(INTERNAL_RAM_START+INTERNAL_RAM_SIZE)
 
-#if 0
 /* ------------------------------------------------------------------------ */
 /*
  * Initial Stack pointer (Used in initialization process)
  */
 #define	INITIAL_SP		INTERNAL_RAM_END
-#endif
 
 /* ------------------------------------------------------------------------ */
 /*
