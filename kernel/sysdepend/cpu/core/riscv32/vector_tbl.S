@@ -252,8 +252,7 @@ external_handler:
 
 	lui	a0, %hi(PLIC_CLAIM_COMPLETE)
 	lw	a0, %lo(PLIC_CLAIM_COMPLETE)(a0)
-	beqz	a0, 3f
-	sw	a0, 18*4(sp)
+	beqz	a0, 2f
 
 	lui	a1, %hi(Csym(knl_intvec_tbl))
 	addi	a1, a1, %lo(Csym(knl_intvec_tbl))
@@ -267,10 +266,6 @@ external_handler:
 1:
 	call	Csym(Default_Handler)
 2:
-	lw	a1, 18*4(sp)
-	lui	a0, %hi(PLIC_CLAIM_COMPLETE)
-	sw	a1, %lo(PLIC_CLAIM_COMPLETE)(a0)
-3:
 	lw	t0, 16*4(sp)
 	csrw	mepc, t0
 	lw	t0, 17*4(sp)
