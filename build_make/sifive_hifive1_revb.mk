@@ -29,5 +29,3 @@ include mtkernel_3/lib/libtk/sysdepend/cpu/core/riscv32/subdir.mk
 include mtkernel_3/kernel/sysdepend/sifive_hifive1_revb/subdir.mk
 include mtkernel_3/kernel/sysdepend/cpu/fe310g002/subdir.mk
 include mtkernel_3/kernel/sysdepend/cpu/core/riscv32/subdir.mk
-
-OBJS += -lgcc
