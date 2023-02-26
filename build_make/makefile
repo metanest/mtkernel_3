@@ -46,6 +46,8 @@ endif
 
 -include mtkernel_3/app_sample/subdir.mk
 
+OBJS += -lgcc
+
 ifneq ($(MAKECMDGOALS),clean)
 ifneq ($(strip $(ASM_DEPS)),)
 -include $(ASM_DEPS)
