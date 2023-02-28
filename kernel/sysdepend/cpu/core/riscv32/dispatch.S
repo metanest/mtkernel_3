@@ -22,23 +22,20 @@
  *	Save registers except for sp to a stack. Save 'sp' to TCB.
  *
  *       Low Address +---------------+
- *             sp -> | R4            |
- *                   | R5            |
- *                   | R6            |
- *                   | R7            |
- *                   | R8            |
- *                   | R9            |
- *                   | R10           |
- *                   | R11           |
+ *             sp -> | s0            |
+ *                   |  |            |
+ *                   |  |            |
+ *                   | s11           |
  *                   +---------------+
- *                   | R0            |
- *                   | R1            |
- *                   | R2            |
- *                   | R3            |
- *                   | R12(ip)       |
- *                   | R14_svc(lr)   |
- *                   | R14_xxx(lr)   | Return address (pc)
- *                   | SPSR_xxx      |
+ *                   | a0            |
+ *                   |  |            |
+ *                   | a7            |
+ *                   | t0            |
+ *                   |  |            |
+ *                   | t6            |
+ *                   | ra            |
+ *                   | mepc          | Return address (pc)
+ *                   | mstatus       |
  *      High Address +---------------+
  */
 
