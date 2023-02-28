@@ -19,5 +19,7 @@
 
 #define	TARGET_CPU_DIR		fe310g002		/* Sysdepend-CPU-Directory name */
 
+#define	MCAUSE_MASK		0x3ff
+
 
 #endif /* __SYS_SYSDEPEND_MACHINE_CPU_H__ */

@@ -54,6 +54,8 @@ Csym(vector_table):
 	.balign 4
 	j undefined_handler  // 15
 
+	.text
+
 	.balign 4
 exception_handler:
 	addi	sp, sp, -4*20
@@ -79,7 +81,9 @@ exception_handler:
 	csrr	t0, mstatus
 	sw	t0, 17*4(sp)
 
-	csrr	t0, mcause		// exceptionの原因が
+	csrr	t0, mcause
+	li	t1, MCAUSE_MASK
+	and	t0, t0, t1		// exceptionの原因が
 	li	t1, 11			// ecallか?
 	bne	t0, t1, 2f		// ecall以外ならジャンプ
 
