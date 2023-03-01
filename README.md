@@ -1,5 +1,5 @@
 # μT-Kernel 3.0 RISC-V移植版
-(まだ)作業中です
+(まだ)作業中です。Sifive HiFive1 Rev B で動きます。この移植版についての問合せ等はきしもとまでお願いします
 # μT-Kernel 3.0
 μT-Kernel 3.0 is a Real-time OS for Small-scale Embedded Systems and IoT Edge nodes.
 
