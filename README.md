@@ -1,4 +1,6 @@
-﻿# μT-Kernel 3.0
+# μT-Kernel 3.0 RISC-V移植版
+(まだ)作業中です
+# μT-Kernel 3.0
 μT-Kernel 3.0 is a Real-time OS for Small-scale Embedded Systems and IoT Edge nodes.
 
 - It is compliant with IEEE Standard 2050-2018 and has high compatibility with μT-Kernel 2.0.
