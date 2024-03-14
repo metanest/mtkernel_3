@@ -20,6 +20,7 @@
 #define CPU_CORE_RISCV32	1				/* Target CPU-Core : RISC-V 32 */
 
 #define TARGET_DIR		sifive_hifive1_revb		/* Sysdepend-Directory name */
+#define KNL_SYSDEP_PATH		sifive_hifive1_revb			/* Kernel sysdepend path */
 
 /*
  **** CPU-depeneded profile (FE310-G002)

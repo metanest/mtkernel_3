@@ -28,6 +28,7 @@
 //#define _IOTE_RX231_
 //#define _IOTE_STM32L4_
 //#define _IOTE_RZA2M_
+//#define _SIFIVE_HIFIVE_REVB_
 
 /*---------------------------------------------------------------------- */
 /* SYSCONF : micro T-Kernel system configuration
