@@ -160,7 +160,7 @@
 /* Use Co-Processor.
  *  1: Valid  0: Invalid
  */
-#define	USE_FPU			(1)	/* Use FPU */
+#define	USE_FPU			(0)	/* Use FPU */
 #define	USE_DSP			(0)	/* Use DSP */
 
 #define	ALWAYS_FPU_ATR		(1)	/* Always set the TA_FPU attribute on all tasks */

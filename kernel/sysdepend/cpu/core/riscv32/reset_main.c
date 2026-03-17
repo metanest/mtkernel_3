@@ -71,7 +71,7 @@ EXPORT void reset_main(void)
 #endif /* USE_FPU */
 
 	/* Startup Kernel */
-	main();		/**** No return ****/
+	knl_main();		/**** No return ****/
 	while(1);	/* guard - infinite loops */
 }
 
