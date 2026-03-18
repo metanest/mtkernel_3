@@ -2,6 +2,60 @@
 (まだ)作業中です。Sifive HiFive1 Rev B で動きます。この移植版についての問合せ等はきしもとまでお願いします。
 
 masterブランチではなくdevelopブランチへの差分となります。
+
+## FreeBSD でのビルド手順
+コンパイラ devel/riscv32-unknown-elf-gcc をインストールします。
+
+    $ sudo pkg install riscv32-unknown-elf-gcc
+
+リポジトリをクローンします。
+
+    $ git clone https://github.com/metanest/mtkernel_3.git
+
+サンプルアプリを実装したブランチ mysample ( https://github.com/metanest/mtkernel_3/tree/mysample ) をチェックアウトします。
+
+    $ cd mtkernel_3
+    $ git checkout remotes/origin/mysample
+    $ git switch -c mysample
+
+ビルドディレクトリに移動しビルドします。
+
+    $ cd build_make
+	$ gmake all
+
+SiFive HiFive1 Rev B を USB に接続します。
+
+(別ウィンドウで) SiFive HiFive1 Rev B のシリアル出力をモニタします。
+
+    $ sudo cu -s 115200 -l /dev/ttyU0
+
+書き込みには devel/openocd を使うのでインストールします。
+
+    $ sudo pkg install openocd
+
+作業用ディレクトリを作り、そこに次のような設定ファイルを作ります。
+
+    $ cat openocd.cfg
+    source [find board/sifive-hifive1-revb.cfg]
+    
+    init
+    
+    proc flash_elf {elf_file} {
+        reset
+        halt
+        flash write_image erase $elf_file
+        verify_image $elf_file
+        echo "flash write_image ($elf_file) complete"
+        reset
+        exit
+    }
+
+さきほどのビルドでできた mtkernel_3.elf をコピーしてきて、次のようなコマンドで SiFive HiFive1 Rev B に書き込みます。
+
+    $ sudo openocd -f openocd.cfg -c 'flash_elf "mtkernel_3.elf"'
+
+書き込みが終了したら、リセットボタンを押せば、動き始めるはずです。
+
 # μT-Kernel 3.0
 μT-Kernel 3.0 is a Real-time OS for Small-scale Embedded Systems and IoT Edge nodes.
 
