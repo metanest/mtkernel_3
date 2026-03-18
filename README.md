@@ -23,6 +23,8 @@ masterブランチではなくdevelopブランチへの差分となります。
     $ cd build_make
 	$ gmake all
 
+build_make ディレクトリに mtkernel_3.elf が生成されているはずです。
+
 SiFive HiFive1 Rev B を USB に接続します。
 
 (別ウィンドウで) SiFive HiFive1 Rev B のシリアル出力をモニタします。
@@ -54,8 +56,51 @@ SiFive HiFive1 Rev B を USB に接続します。
 
     $ sudo openocd -f openocd.cfg -c 'flash_elf "mtkernel_3.elf"'
 
-書き込みが終了したら、リセットボタンを押せば、動き始めるはずです。
+書き込みが終了したら、自動でリセットされるはずですがうまくいかない場合は手動でリセットすれば、動き始めるはずです。
 
+## Linux でのビルド手順
+SiFive が配布しているツールチェインを使います。 https://github.com/sifive/freedom-tools/releases からリンクされている riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-linux-centos6.tar.gz をダウンロードしてください（Red Hat系の場合。Debian系の場合は該当部を ubuntu14 に読み替えてください）。
+
+    $ wget https://static.dev.sifive.com/dev-tools/freedom-tools/v2020.12/riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-linux-centos6.tar.gz
+
+$HOME に展開します
+
+    $ cd $HOME
+	$ tar xf (ファイルを置いた場所)/riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-linux-centos6.tar.gz
+
+名前があまりに長いので tools に変えます。既に tools というディレクトリがある人は適宜別名に置き換えるか、既にあるほうを別の名前に mv してください。
+
+    $ mv riscv64-unknown-elf-toolchain-10.2.0-2020.12.8-x86_64-linux-centos6 tools
+
+リポジトリのクローンと mysample のチェックアウトは FreeBSD の場合と同じです。
+
+次に build_make/makefile と build_make/sifive_hifive1_revb.mk を修正します。
+
+makefile は OBJS += -lgcc という記述を削除してください。
+
+sifive_hifive1_revb.mk は、最初のほうにある GCC と AS と LINK の設定を riscv32-... から riscv64-... に変更してください。さきほどの SiFive のツールチェインで提供されているのが 64 ビット対応版だからです。-mcpu=sifive-e31 という引数により、32 ビットコードが生成されますので安心してください。
+
+以上の修正ができたらメイクできます。ツールにパスを通して make を起動します。Linux では標準で GNU Make でしょう。
+
+    $ cd build_make
+    $ PATH=$HOME/tools/bin:$PATH make all
+
+SiFive HiFive1 Rev B を USB に接続します。
+
+(別ウィンドウで) SiFive HiFive1 Rev B のシリアル出力をモニタします。デバイス名はシステムに依り違うかもしれません。私の環境は Fedora です。
+
+    $ sudo dnf install cu # cu がインストールされてなかったらインストールする
+    $ sudo cu -s 115200 -l /dev/ttyACM0
+
+書き込みには FreeBSD 同様に openocd を使うのでインストールします。
+
+    $ sudo dnf install openocd
+
+あとは FreeBSD と同様の openocd.cfg というファイルを用意して、
+
+    $ sudo openocd -f openocd.cfg -c 'flash_elf "mtkernel_3.elf"'
+
+とすれば書き込みできて動かせるはずです。
 # μT-Kernel 3.0
 μT-Kernel 3.0 is a Real-time OS for Small-scale Embedded Systems and IoT Edge nodes.
 
